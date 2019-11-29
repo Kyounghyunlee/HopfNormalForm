@@ -150,15 +150,15 @@ of power series of g_k
 ==#
 
 function calculate_normal_form(
-    f::Vector{Basic}, 
-    v::Vector{Basic}, 
-    norder::Integer, 
-    cm::Integer, 
-    m1::Integer, 
-    m2::Integer, 
-    m3::Integer, 
-    n::Integer, 
-    ω_h::AbstractFloat, 
+    f::Vector{Basic},
+    v::Vector{Basic},
+    norder::Integer,
+    cm::Integer,
+    m1::Integer,
+    m2::Integer,
+    m3::Integer,
+    n::Integer,
+    ω_h::AbstractFloat,
     zero_tol::AbstractFloat
 )
     G = Array{Basic}(undef, m3);
@@ -313,7 +313,7 @@ function calculate_normal_form(
     S = expand(S);
 
     return -A[1, 1, 0, 1] / S
-end    
+end
 
 # Include example systems
 include("Systems.jl")
