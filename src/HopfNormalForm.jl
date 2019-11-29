@@ -170,7 +170,7 @@ function calculate_normal_form(
     RD = Array{Basic}(undef, cm, norder); # Reduced dynamics on the center manifold by order
     RD_sum = Array{Basic}(undef, cm); # Reduced dynamics on the center manifold summation of all orders
 
-    @vars ϵ
+    @vars ϵ, ν
     # ϵ is symbolic variable which is used in the algorithm which does not have any physical meaning
 
     if cm == 2 # set multidimensional array for saving coefficints of the polynomial
@@ -312,7 +312,7 @@ function calculate_normal_form(
     S = A[1, 2, 1, 0] - A[1, 2, 0, 0] * A[2, 1, 1, 0] - A[2, 2, 0, 0] * A[1, 1, 1, 0];
     S = expand(S);
 
-    return -A[1, 1, 0, 1] / S
+    return -A[1, 1, 0, 1] / S* ν
 end
 
 # Include example systems

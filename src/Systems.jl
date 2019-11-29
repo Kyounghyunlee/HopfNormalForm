@@ -2,7 +2,6 @@ module Systems
 
 using SymEngine
 using ..HopfNormalForm: calculate_normal_form
-
 const I=1im
 
 function example1()
@@ -18,7 +17,7 @@ function example1()
     v = [symbols("v_$i") for i in 1:n]; # Define state-space variables
     f = Array{Basic}(undef, n);
 
-    @vars ka2, ka3  # Define symbolic variables which is needed to define the equation of motion
+    @vars ka2, ka3, ν  # Define symbolic variables which is needed to define the equation of motion
     # In this example the variables are nonlinear stifness parameters
 
     # Define the equation of motion at the Hopf bifurcation point where the dimension of centermanifold is 2
