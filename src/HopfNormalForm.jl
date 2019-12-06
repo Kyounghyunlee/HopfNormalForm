@@ -12,7 +12,7 @@
 """
 module HopfNormalForm
 
-using SymEngine, OffsetArrays, StaticArrays, NLsolve, NLopt
+using SymEngine, OffsetArrays, StaticArrays
 
 export calculate_normal_form, verify, Systems, Flutter_opt
 
