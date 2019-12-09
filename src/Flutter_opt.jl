@@ -331,7 +331,7 @@ function my_con(x::Vector,grad::Vector) # Constraint of the optimization
     grad[1] = -2*2.33467790333688e-08 *(x[1]*1000)
     grad[2] = 7.10626449516451e-03
 end
--(-7.10626449516451e-06*(x[2]*1000)) + 2.33467790333688e-08*(x[1]*1000))^2)
+-(-7.10626449516451e-06*(x[2]*1000)) + 2.33467790333688e-08*(x[1]*1000)^2)
 end
 
 function my_con2(x::Vector,grad::Vector) # Constraint of the optimization
