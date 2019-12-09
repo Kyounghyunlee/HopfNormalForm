@@ -40,7 +40,7 @@ function fourier_diff(N::Integer)
     return D
 end
 
-function flutter_eq(u, p, t) #Flutter equation of motion for system 1
+function flutter_eq(u, p, t) #Flutter equation of motion for Model 1
     ka2=p.ka2
     ka3=p.ka3
     U=p.U
@@ -59,7 +59,7 @@ function flutter_eq(u, p, t) #Flutter equation of motion for system 1
     return SVector(h_dot,h_ddot,theta_dot,theta_ddot,x_bar_dot,x_bar_ddot)
 end
 
-function flutter_eq2(u, p, t) #Flutter equation of motion for system 2
+function flutter_eq2(u, p, t) # Flutter equation of motion for Model 2
     ka2=p.ka2
     ka3=p.ka3
     U=p.U
@@ -116,7 +116,7 @@ function periodic_zero_problem!(res, rhs, u, p)
     return res
 end
 
-function Flutter_solve(N,p)
+function Flutter_solve(N,p) # Model 1
 # Flutter_solve is function that solves periodic boundary value problem of flutter with using normal form as an initial guess
 
     ω = 15.4793
@@ -133,16 +133,16 @@ function Flutter_solve(N,p)
     return (u=sol.zero, T=sol.zero[end], converged=converged(sol))
 end
 
-function Flutter_solve2(N,p)
+function Flutter_solve2(N,p) # Model 2
 # Flutter_solve is function that solves periodic boundary value problem of flutter with using normal form as an initial guess (model2)
 
     ω = 15.1829
     ini_T=2π/ω
     t = range(0, ini_T, length=N+1)[1:end-1]
-    eig=[ 0.0251 + 0.0251*I   0.3809 - 0.3808i  -0.0000 + 0.0547*I    0.8304 + 0.0000*I   -0.0067 + 0.0050*I    0.0753 + 0.1017*I];
+    eig=[ 0.0251 + 0.0251*I   0.3809 - 0.3808*I  -0.0000 + 0.0547*I    0.8304 + 0.0000*I   -0.0067 + 0.0050*I    0.0753 + 0.1017*I];
     arg=atan(imag(eig[1])/real(eig[1]))
     eig=exp((-arg+π/2)*1im)*eig
-    r2=-0.6792509995e-2*(p.U-23.95)/(1.282397242*10^(-8)*p.ka2^2-4.610449913*10^(-6)*p.ka3);
+    R2=-0.6792509995e-2*(p.U-23.95)/(1.282397242*10^(-8)*p.ka2^2-4.610449913*10^(-6)*p.ka3);
     R=sqrt(R2)
     u1=2*real([R*eig[1]*exp.(I*ω*t)';R*eig[2]*exp.(I*ω*t)';R*eig[3]*exp.(I*ω*t)';R*eig[4]*exp.(I*ω*t)';R*eig[5]*exp.(I*ω*t)';R*eig[6]*exp.(I*ω*t)'])
     # Solve the nonlinear zero problem
@@ -150,13 +150,19 @@ function Flutter_solve2(N,p)
     return (u=sol.zero, T=sol.zero[end], converged=converged(sol))
 end
 
-function Flutter_solve!(N,p,u0)
+function Flutter_solve!(N,p,u0) # Model 1
 # Flutter_solve! function is function to solve boundary value problem with initial guess u0
     sol = nlsolve((res, u) -> periodic_zero_problem!(res, flutter_eq, u, p), u0)
     return (u=sol.zero, T=sol.zero[end], converged=converged(sol))
 end
 
-function continuation(N,cp,p0,dU)
+function Flutter_solve2!(N,p,u0) # Model 2
+# Flutter_solve! function is function to solve boundary value problem with initial guess u0
+    sol = nlsolve((res, u) -> periodic_zero_problem!(res, flutter_eq2, u, p), u0)
+    return (u=sol.zero, T=sol.zero[end], converged=converged(sol))
+end
+
+function continuation(N,cp,p0,dU) # Model 1
 # Continuation gives continuation result of flutter equation using normal form as an initial guess
     U=Vector{Float64}(undef,cp)
     u=Vector{Vector{Float64}}(undef,cp)
@@ -186,7 +192,7 @@ function continuation(N,cp,p0,dU)
     return (u=u,U=U,T=T)
 end
 
-function continuation2(N,cp,p0,dU)
+function continuation2(N,cp,p0,dU) # Model 2
 # Continuation gives continuation result of flutter equation using normal form as an initial guess
     U=Vector{Float64}(undef,cp)
     u=Vector{Vector{Float64}}(undef,cp)
@@ -203,7 +209,7 @@ function continuation2(N,cp,p0,dU)
         #p.U=U[i]
         p=(ka2=p0.ka2,ka3=p0.ka3,U=U[i],D=DN)
 
-        s2=Flutter_solve!(N,p,u[i-1])
+        s2=Flutter_solve2!(N,p,u[i-1])
         if s2.converged==true
             u[i]=s2.u
             T[i]=s2.T
@@ -216,7 +222,7 @@ function continuation2(N,cp,p0,dU)
     return (u=u,U=U,T=T)
 end
 
-function measure_error(ka20::Real,ka30::Real)
+function measure_error(ka20::Real,ka30::Real) # Computing the numerical prediction error (Model1)
 # measure_error function gives the error=[numerical_amplitude-measured_amplitude] at 2 measured wind speeds
 hh=Vector{Float64}(undef,2)
 us=Vector{Float64}(undef,2)
@@ -257,18 +263,22 @@ end
 return e*1000 # Scale of measured error is mm
 end
 
-function measure_error2(ka20::Real,ka30::Real)
+function measure_error2(ka20::Real,ka30::Real) # Computing the numerical prediction error (Model2)
 # measure_error function gives the error=[numerical_amplitude-measured_amplitude] at 2 measured wind speeds
-hh=Vector{Float64}(undef,2)
-us=Vector{Float64}(undef,2)
-mh=Vector{Float64}(undef,2)
+hh=Vector{Float64}(undef,4)
+us=Vector{Float64}(undef,4)
+mh=Vector{Float64}(undef,4)
 ah=Vector{Float64}(undef,20)
 # Measuremen results
 us[1]=23.5
 us[2]=22.75
+us[3]=21.8
+us[4]=21.0
 
 mh[1]=0.007727
 mh[2]=0.0148
+mh[3]=0.0224
+mh[4]=0.02575
 
 N=15
 p = (ka2=ka20,ka3=ka30,U=23.9,D=fourier_diff(N))
@@ -281,7 +291,7 @@ ah[i]=ah[i]^2
 end
 ## interpolate the amplitude of LCO at the measured wind speeds. Note that square amplitude of LCO is proportional to wind speed near the Hopf point.
 for i in 1:cp-1
-    for j in 1:2
+    for j in 1:4
         if us[j]<s.U[i] && s.U[i+1]< us[j]
             au=us[j]-s.U[i]
             bu=s.U[i+1]-us[j]
@@ -292,14 +302,14 @@ for i in 1:cp-1
     end
 end
 e=0
-for i in 1:2
+for i in 1:4
 e+=hh[i]
 end
 return e*1000 # Scale of measured error is mm
 end
 
 
-function my_fun(x::Vector,grad::Vector) # Function to minimize (model 1)
+function my_fun(x::Vector,grad::Vector) # Function to minimize (Model 1)
 a=1000*x[1]
 b=1000*x[2]
 
@@ -312,7 +322,7 @@ d=(measure_error(a,b))
 return d
 end
 
-function my_fun2(x::Vector,grad::Vector) # Function to minimize (model 1)
+function my_fun2(x::Vector,grad::Vector) # Function to minimize (Model 2)
 a=1000*x[1]
 b=1000*x[2]
 
@@ -326,15 +336,15 @@ return d
 end
 
 
-function my_con(x::Vector,grad::Vector) # Constraint of the optimization
+function my_con(x::Vector,grad::Vector) # Constraint of the optimization (Model 1)
     if length(grad) > 0
     grad[1] = -2*2.33467790333688e-08 *(x[1]*1000)
     grad[2] = 7.10626449516451e-03
 end
--(-7.10626449516451e-06*(x[2]*1000)) + 2.33467790333688e-08*(x[1]*1000)^2)
+-((-7.10626449516451e-06*(x[2]*1000)) + 2.33467790333688e-08*(x[1]*1000)^2)
 end
 
-function my_con2(x::Vector,grad::Vector) # Constraint of the optimization
+function my_con2(x::Vector,grad::Vector) # Constraint of the optimization (Model 2)
     if length(grad) > 0
     grad[1] = -2*8.159808337*10^(-9) *(x[1]*1000)
     grad[2] = 2.703488177e-03
@@ -343,7 +353,7 @@ end
 end
 
 #Optimization using NLopt package
-function optimize_NLstiff(x1,x2)
+function optimize_NLstiff(x1,x2) # Model 1
     opt = Opt(:LD_MMA, 2)
     opt.lower_bounds = [1, 1]
     opt.upper_bounds = [6, 6]
@@ -354,7 +364,7 @@ function optimize_NLstiff(x1,x2)
     return minx
 end
 
-function optimize_NLstiff2(x1,x2)
+function optimize_NLstiff2(x1,x2) # Model 2
     opt = Opt(:LD_MMA, 2)
     opt.lower_bounds = [0.2, 0.2]
     opt.upper_bounds = [6, 6]
