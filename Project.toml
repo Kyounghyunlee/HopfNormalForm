@@ -1,7 +1,7 @@
 name = "HopfNormalForm"
 uuid = "686b0268-8a98-4522-b46d-296092729a12"
 authors = ["Kyoung Hyun Lee"]
-version = "0.1.3"
+version = "0.1.1"
 
 [deps]
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
