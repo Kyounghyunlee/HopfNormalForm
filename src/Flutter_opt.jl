@@ -237,7 +237,7 @@ mh[2]=0.0109
 
 N=15
 p = (ka2=ka20,ka3=ka30,U=17.9,D=fourier_diff(N))
-cp=15
+cp=18
 s=continuation(N,cp,p,0.05)
 
 for i in 1:cp

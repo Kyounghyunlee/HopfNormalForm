@@ -217,23 +217,6 @@ function calculate_normal_form(
             G[k] = expand(G[k])
             G[k] = chop_expr(G[k], zero_tol)
 
-    ######## Define the index of polynomial ########
-            # ind_list = Vector{Vector{Int}}()
-            # if cm == 2
-            #     for l = 0:j
-            #         m = j - l
-            #         push!(ind_list, [l, m])
-            #     end
-            # elseif cm == 3
-            #     for l = 0:j, m = 0:j-l
-            #         nn = j - l - m
-            #         push!(ind_list, [l, m, nn])
-            #     end
-            # end
-            # ind_l = Vector{Vector{Int}}()
-            # for p = 1:length(ind_list)
-            #     push!(ind_l, [k; ind_list[p]])
-            # end
             if cm == 2
                 ind_l = ((k, l, j - l) for l = 0:j)
             elseif cm == 3
