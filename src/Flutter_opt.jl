@@ -224,20 +224,22 @@ end
 
 function measure_error(ka20::Real,ka30::Real) # Computing the numerical prediction error (Model1)
 # measure_error function gives the error=[numerical_amplitude-measured_amplitude] at 2 measured wind speeds
-hh=Vector{Float64}(undef,2)
-us=Vector{Float64}(undef,2)
-mh=Vector{Float64}(undef,2)
+hh=Vector{Float64}(undef,3)
+us=Vector{Float64}(undef,3)
+mh=Vector{Float64}(undef,3)
 ah=Vector{Float64}(undef,20)
 # Measuremen results
 us[1]=17.2
 us[2]=16.5
+us[3]=15.8
 
-mh[1]=0.0078
-mh[2]=0.0109
+mh[1]=0.007523
+mh[2]=0.010891
+mh[3]=0.010938
 
 N=15
 p = (ka2=ka20,ka3=ka30,U=17.9,D=fourier_diff(N))
-cp=18
+cp=15
 s=continuation(N,cp,p,0.05)
 
 for i in 1:cp
@@ -246,7 +248,7 @@ ah[i]=ah[i]^2
 end
 ## interpolate the amplitude of LCO at the measured wind speeds. Note that square amplitude of LCO is proportional to wind speed near the Hopf point.
 for i in 1:cp-1
-    for j in 1:2
+    for j in 1:3
         if us[j]<s.U[i] && s.U[i+1]< us[j]
             au=us[j]-s.U[i]
             bu=s.U[i+1]-us[j]
@@ -257,7 +259,7 @@ for i in 1:cp-1
     end
 end
 e=0
-for i in 1:2
+for i in 1:3
 e+=hh[i]
 end
 return e*1000 # Scale of measured error is mm
@@ -355,9 +357,9 @@ end
 #Optimization using NLopt package
 function optimize_NLstiff(x1,x2) # Model 1
     opt = Opt(:LD_MMA, 2)
-    opt.lower_bounds = [1, 1]
-    opt.upper_bounds = [6, 6]
-    opt.xtol_abs = 1e-2
+    opt.lower_bounds = [3.5, 13]
+    opt.upper_bounds = [5, 15.5]
+    opt.xtol_abs = 1.5*1e-2
     opt.min_objective = my_fun
     inequality_constraint!(opt, (x,g) -> my_con(x,g), 1e-3)
     (minf,minx,ret) = optimize(opt, [x1, x2])
@@ -366,8 +368,8 @@ end
 
 function optimize_NLstiff2(x1,x2) # Model 2
     opt = Opt(:LD_MMA, 2)
-    opt.lower_bounds = [0.2, 0.2]
-    opt.upper_bounds = [6, 6]
+    opt.lower_bounds = [4, 19]
+    opt.upper_bounds = [6, 21]
     opt.xtol_abs = 1e-2
     opt.min_objective = my_fun2
     inequality_constraint!(opt, (x,g) -> my_con2(x,g), 1e-3)
