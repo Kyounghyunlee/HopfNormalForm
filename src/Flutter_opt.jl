@@ -52,8 +52,8 @@ function flutter_eq(u, p, t) #Flutter equation of motion for Model 1
     x_bar       = u[5]
     x_bar_dot   = u[6]
 
-    h_ddot=- 210.579*h - 1.0*theta*(0.0338518*U^2 - 3.6782) - theta_dot*(0.00928785*U - 0.0382505) - 0.00308051*U^3*x_bar - 0.00731249*U^2*x_bar_dot - 1.0*h_dot*(0.0338518*U + 0.869643)
-    theta_ddot=239.889*h + 0.00350927*U^3*x_bar + 0.00833028*U^2*x_bar_dot - 1.0*theta_dot*(0.0631717*U + 3.29485) - 1.0*ka2*theta^2 - 1.0*ka3*theta^3 + h_dot*(0.0385635*U + 0.990685) + theta*(0.0385635*U^2 - 316.836)
+    h_ddot=- 210.579*h - 1.0*theta*(0.0338518*U^2 - 3.6782) - theta_dot*(0.00928785*U - 0.0382505) - 0.00308051*U^3*x_bar - 0.00731249*U^2*x_bar_dot - 1.0*h_dot*(0.0338518*U + 0.869643) - 0.0679686*ka2*theta^2 - 0.0679686*ka3*theta^3
+    theta_ddot=239.889*h + 0.00350927*U^3*x_bar + 0.00833028*U^2*x_bar_dot - 1.0*theta_dot*(0.0631717*U + 3.29485) + 5.85473*ka2*theta^2 + 5.85473*ka3*theta^3 + h_dot*(0.0385635*U + 0.990685) + theta*(0.0385635*U^2 - 316.836)
     x_bar_ddot=6.66667*h_dot + theta_dot + 6.66667*U*theta - 2.30333*U*x_bar_dot - 0.606667*U^2*x_bar
     # SVector is much faster for small ODEs (i.e., below 50-100 dimensions)
     return SVector(h_dot,h_ddot,theta_dot,theta_ddot,x_bar_dot,x_bar_ddot)
@@ -71,9 +71,10 @@ function flutter_eq2(u, p, t) # Flutter equation of motion for Model 2
     x_bar       = u[5]
     x_bar_dot   = u[6]
 
-    h_ddot=- 197.827*h - 1.0*theta*(0.0338296*U^2 - 3.99137) - theta_dot*(0.00930375*U - 0.0684405) - 0.00307849*U^3*x_bar - 0.0073077*U^2*x_bar_dot - 1.0*h_dot*(0.0338296*U + 0.92079)
-    theta_ddot=219.648*h + h_dot*(0.0375611*U + 1.02236) - 1.0*theta_dot*(0.0633343*U + 6.04153) + 0.00341806*U^3*x_bar + 0.00811375*U^2*x_bar_dot - 1.0*ka2*theta^2 - 1.0*ka3*theta^3 + theta*(0.0375611*U^2 - 352.336)
-    x_bar_ddot=6.66667*h_dot + theta_dot + 6.66667*U*theta - 2.30333*U*x_bar_dot - 0.606667*U^2*x_bar
+    h_ddot=- 197.827*h - 1.0*theta*(0.0338296*U^2 - 3.99138) - theta_dot*(0.00930375*U - 0.0684407) - 0.00307849*U^3*x_bar - 0.0073077*U^2*x_bar_dot - 1.0*h_dot*(0.0338296*U + 0.92079) - 0.0662019*ka2*theta^2 - 0.0662019*ka3*theta^3
+    theta_ddot=219.648*h + h_dot*(0.0375611*U + 1.02236) - 1.0*theta_dot*(0.0633343*U + 6.04155) + 0.00341806*U^3*x_bar + 0.00811375*U^2*x_bar_dot + 5.84392*ka2*theta^2 + 5.84392*ka3*theta^3 + theta*(0.0375611*U^2 - 352.336)
+    x_bar_ddot=219.648*h + h_dot*(0.0375611*U + 1.02236) - 1.0*theta_dot*(0.0633343*U + 6.04155) + 0.00341806*U^3*x_bar + 0.00811375*U^2*x_bar_dot + 5.84392*ka2*theta^2 + 5.84392*ka3*theta^3 + theta*(0.0375611*U^2 - 352.336)
+
 
     # SVector is much faster for small ODEs (i.e., below 50-100 dimensions)
     return SVector(h_dot,h_ddot,theta_dot,theta_ddot,x_bar_dot,x_bar_ddot)
