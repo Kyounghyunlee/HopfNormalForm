@@ -13,7 +13,7 @@ function example1()
     m3 = 4; # Dimension of the stable manifold of the dynmical system
     n = m1+2*m2+m3; # Total dimension of the dynamical system
     ω_h = 15.4793; # Eigenvalue that crosses unit circle at Hopf bifurcation point ± ω_h
-    zero_tol = 1e-11; # zero tolerance to chop out very small coeffs of symbolic computation
+    zero_tol = 1e-13; # zero tolerance to chop out very small coeffs of symbolic computation
 
     v = [symbols("v_$i") for i in 1:n]; # Define state-space variables
     f = Array{Basic}(undef, n);
@@ -53,7 +53,7 @@ function example2()
     m3 = 4; # Dimension of the stable manifold of the dynmical system
     n = m1+2*m2+m3; # Total dimension of the dynamical system
     ω_h = 15.1829; # Eigenvalue that crosses unit circle at Hopf bifurcation point ± ω_h
-    zero_tol = 1e-11; # zero tolerance to chop out very small coeffs of symbolic computation
+    zero_tol = 1e-13; # zero tolerance to chop out very small coeffs of symbolic computation
 
     v = [symbols("v_$i") for i in 1:n]; # Define state-space variables
     f = Array{Basic}(undef, n);
