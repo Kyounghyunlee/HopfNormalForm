@@ -8,12 +8,11 @@ module
 
 ## Installation
 
-Within Julia, you can install the HopfNormalForm.jl package with the package manager:
-```Julia
-using Pkg
-Pkg.add("https://github.com/Kyounghyunlee/HopfNormalForm.jl")
-```
+Within Julia, you can install the HopfNormalForm.jl package with the package manager. First enter the Pkg REPL by pressing ] from the Julia REPL and type:
 
+```Julia
+pkg> add https://github.com/Kyounghyunlee/HopfNormalForm.jl
+```
 
 ## Usage
 To compute the center manifold and Hopf normal form function use function calculate_normal_form
