@@ -13,8 +13,9 @@
 module HopfNormalForm
 
 using SymEngine, OffsetArrays, StaticArrays
+using NLsolve
 
-export calculate_normal_form, verify, Systems, Flutter_opt
+export calculate_normal_form, verify, Systems, Flutter_opt, Continuation
 
 ################### Basic functions for symbolic computation in Julia ###################
 function coeff2(f::Basic, e::Array{Basic,1}, N)::Basic #coefficient of multivariate Polynomial for univariate case just use diff
@@ -301,5 +302,6 @@ end
 # Include example systems
 include("Systems.jl")
 include("Flutter_opt.jl")
+include("Continuation.jl")
 
 end # module
